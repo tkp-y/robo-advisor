@@ -31,6 +31,15 @@ latest_day = dates[0]
 
 latest_close = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
 
+high_prices = []
+#maximum of all high prices
+for date in dates:
+    high_price = float(tsd[date]["2. high"])
+    high_prices.append(high_price)
+
+
+recent_high = max(high_prices)
+
 print("-------------------------")
 print("SELECTED SYMBOL: XYZ")
 print("-------------------------")
@@ -39,7 +48,7 @@ print("REQUEST AT: 2018-02-20 02:00pm")
 print("-------------------------")
 print("LATEST DAY: " + last_refreshed)
 print("LATEST CLOSE: " + to_usd(float(latest_close)))
-print("RECENT HIGH: $101,000.00")
+print("RECENT HIGH: " + to_usd(float(recent_high)))
 print("RECENT LOW: $99,000.00")
 print("-------------------------")
 print("RECOMMENDATION: BUY!")
