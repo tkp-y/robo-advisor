@@ -22,11 +22,14 @@ response = requests.get(request_url)
 
 parsed_response = json.loads(response.text)
 
-latest_close = parsed_response["Time Series (Daily)"]["2021-02-26"]["4. close"]
+tsd = parsed_response["Time Series (Daily)"]
 
 last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
 
+dates = list(tsd.keys()) #sort to ensure latest day is first
+latest_day = dates[0]
 
+latest_close = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
 
 print("-------------------------")
 print("SELECTED SYMBOL: XYZ")
