@@ -6,6 +6,10 @@ import json
 import csv
 import os
 
+
+from dotenv import load_dotenv
+load_dotenv()
+
 #to convert numbers to price format
 def to_usd(my_price):
     """
@@ -16,8 +20,9 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
-
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo"
+api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
+symbol = "MSFT"
+request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&apikey=" + api_key
 response = requests.get(request_url)
 
 
