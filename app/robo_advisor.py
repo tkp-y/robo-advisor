@@ -3,6 +3,8 @@
 
 import requests
 import json
+import csv
+import os
 
 #to convert numbers to price format
 def to_usd(my_price):
@@ -46,6 +48,14 @@ for date in dates:
 recent_high = max(high_prices)
 recent_low = min(low_prices)
 
+
+
+#write to CSV
+csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
+
+with open(csv_file_path, "w") as csv_file:
+    writer.DictWrite(csv_file, filednames = ["city", "name"])
+
 print("-------------------------")
 print("SELECTED SYMBOL: XYZ")
 print("-------------------------")
@@ -60,5 +70,8 @@ print("-------------------------")
 print("RECOMMENDATION: BUY!")
 print("RECOMMENDATION REASON: TODO")
 print("-------------------------")
+print("WRITING DATA TO CSV: " + csv_file_path)
+print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
+
