@@ -105,5 +105,5 @@ try:
     print("HAPPY INVESTING!")
     print("-------------------------")
 except:
-    print(symbol + " stock symbol not found. Expecting an existing stock symbol like 'MSFT'. Please try again.")
+    print(symbol + " stock symbol not found. Please try again.")
 
