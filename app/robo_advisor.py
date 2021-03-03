@@ -99,10 +99,19 @@ try:
 
             })
 
+    #line graph
     csv_df = pd.read_csv(csv_file_path)
 
     graph = px.line(csv_df, x = "timestamp", y = "close", title = symbol + " Stock Prices Over Time")
     graph.show()
+
+    #high and low stock prices line graph
+    fig = px.line(csv_df, x="timestamp", y=["high", "low"], title = symbol + " High and Low Stock Prices Over Time")
+    fig.show()
+    
+    #bar chart of the volumes
+    bar = px.bar(csv_df, x = "timestamp", y = "volume", title = symbol + " Stock Volume Over Time")
+    bar.show()
 
     print("-------------------------")
     print("SELECTED SYMBOL: " + symbol)
