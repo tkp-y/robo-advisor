@@ -26,11 +26,8 @@ def to_usd(my_price):
 
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 symbol = input("Please enter a stock or cryptocurrency symbol: ")
-if len(symbol) != 4:
+if symbol.isalpha() == False:
     print("Oh, expecting a properly-formed stock symbol like 'MSFT'. Please try again.")
-    exit()
-elif symbol.isalpha() == False:
-    print("Oh, expecting a properly-formed stock symbol like 'MSFT' with only letters. Please try again.")
     exit()
 
 
@@ -67,6 +64,16 @@ try:
     recent_low = min(low_prices)
 
 
+    #for the recommendation 
+    #buy the stock if the latest closing price is less than 30% above the recent low
+    if float(latest_close) < (float(recent_low) * 1.3):
+        recommend = "Buy!"
+        reason = "The stocks latest closing price is less than 30% higher than the recent low, which is under the threshold."
+    else:
+        recommend = "Do not buy!"
+        reason = "The stocks latest closing price is more than 30% higher than the recent low, exceeding the threshold."
+
+
 
     #write to CSV
     csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
@@ -97,8 +104,8 @@ try:
     print("RECENT HIGH: " + to_usd(float(recent_high)))
     print("RECENT LOW: " + to_usd(float(recent_low)))
     print("-------------------------")
-    print("RECOMMENDATION: BUY!")
-    print("RECOMMENDATION REASON: TODO")
+    print("RECOMMENDATION: " + recommend)
+    print("RECOMMENDATION REASON: " + reason)
     print("-------------------------")
     print("WRITING DATA TO CSV: " + csv_file_path)
     print("-------------------------")
