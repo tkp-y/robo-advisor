@@ -23,6 +23,7 @@ Use Anaconda to create and activate a new virtual environment, perhaps called "s
 From inside the virtual environment, install package dependencies:
 
     pip install -r requirements.txt
+    pip install plotly 
 
 Setup
 

@@ -7,6 +7,12 @@ import csv
 import os
 from datetime import datetime
 
+
+
+import pandas as pd
+import plotly.express as px
+
+
 #datetime object containing current date and time
 now = datetime.now()
 
@@ -92,6 +98,11 @@ try:
                 "volume": daily_prices["5. volume"]
 
             })
+
+    csv_df = pd.read_csv(csv_file_path)
+
+    graph = px.line(csv_df, x = "timestamp", y = "close", title = symbol + " Stock Prices Over Time")
+    graph.show()
 
     print("-------------------------")
     print("SELECTED SYMBOL: " + symbol)
