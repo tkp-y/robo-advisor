@@ -79,10 +79,10 @@ try:
     #buy the stock if the latest closing price is less than 30% above the recent low
     if float(latest_close) < (float(recent_low) * 1.3):
         recommend = "Buy!"
-        reason = "The stocks latest closing price is less than 30% higher than the recent low, which is under the threshold."
+        reason = "The stocks latest closing price is less than 30% higher than the recent low (in the past year), which is under the threshold."
     else:
         recommend = "Do not buy!"
-        reason = "The stocks latest closing price is more than 30% higher than the recent low, exceeding the threshold."
+        reason = "The stocks latest closing price is more than 30% higher than the recent low (in the past year), exceeding the threshold."
 
 
 
