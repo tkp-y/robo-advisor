@@ -38,21 +38,26 @@ if symbol.isalpha() == False:
 
 
 try:
-    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&apikey=" + api_key
+    #request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&apikey=" + api_key
+    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=" + symbol + "&apikey=" + api_key
     response = requests.get(request_url)
 
 
 
     parsed_response = json.loads(response.text)
 
-    tsd = parsed_response["Time Series (Daily)"]
+    #tsd = parsed_response["Time Series (Daily)"]
+    tsd = parsed_response["Weekly Time Series"]
 
     last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
-
-    dates = list(tsd.keys()) #sort to ensure latest day is first
+    dates = []
+    date_list = list(tsd.keys()) #sort to ensure latest day is first
+    for num in range(0,52):
+        dates.append(date_list[num])
     latest_day = dates[0]
 
-    latest_close = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
+    #latest_close = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
+    latest_close = parsed_response["Weekly Time Series"][latest_day]["4. close"]
 
     high_prices = []
     low_prices = []
