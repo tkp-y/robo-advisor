@@ -1,6 +1,4 @@
 # this is the "app/robo_advisor.py" file
-
-
 import requests
 import json
 import csv
@@ -43,50 +41,52 @@ try:
     response = requests.get(request_url)
 
 
-
+    #parse the text
     parsed_response = json.loads(response.text)
 
     #tsd = parsed_response["Time Series (Daily)"]
     tsd = parsed_response["Weekly Time Series"]
 
+    #find the last refreshed date
     last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
     dates = []
+    #get list of dates
     date_list = list(tsd.keys()) #sort to ensure latest day is first
+    #go through 52 weeks, find each date and add to list
     for num in range(0,52):
         dates.append(date_list[num])
     latest_day = dates[0]
 
     #latest_close = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
+    #find the latest closing price
     latest_close = parsed_response["Weekly Time Series"][latest_day]["4. close"]
 
+    #create lists to hold the high and low prices from each data
     high_prices = []
     low_prices = []
-
-    #maximum of all high prices
     for date in dates:
         high_price = float(tsd[date]["2. high"])
         low_price = float(tsd[date]["3. low"])
         high_prices.append(high_price)
         low_prices.append(low_price)
 
-
-
+    #find maximum of all high prices, minimum of all low prices
     recent_high = max(high_prices)
     recent_low = min(low_prices)
 
 
     #for the recommendation 
-    #buy the stock if the latest closing price is less than 30% above the recent low
-    if float(latest_close) < (float(recent_low) * 1.3):
+    #buy the stock if the latest closing price is less than 25% above the recent low
+    if float(latest_close) < (float(recent_low) * 1.25):
         recommend = "Buy!"
-        reason = "The stocks latest closing price is less than 30% higher than the recent low (in the past year), which is under the threshold."
+        reason = "The stocks latest closing price is less than 25% higher than the recent low (in the past year), which is under the threshold."
     else:
         recommend = "Do not buy!"
-        reason = "The stocks latest closing price is more than 30% higher than the recent low (in the past year), exceeding the threshold."
+        reason = "The stocks latest closing price is more than 25% higher than the recent low (in the past year), exceeding the threshold."
 
 
 
-    #write to CSV
+    #write info to CSV
     csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
     csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
     with open(csv_file_path, "w") as csv_file:
@@ -104,7 +104,7 @@ try:
 
             })
 
-    #line graph
+    #line graph for closing stock prices over time
     csv_df = pd.read_csv(csv_file_path)
 
     graph = px.line(csv_df, x = "timestamp", y = "close", title = symbol + " Stock Prices Over Time")
@@ -118,6 +118,8 @@ try:
     bar = px.bar(csv_df, x = "timestamp", y = "volume", title = symbol + " Stock Volume Over Time")
     bar.show()
 
+
+    #print out the output
     print("-------------------------")
     print("SELECTED SYMBOL: " + symbol)
     print("-------------------------")
@@ -137,5 +139,6 @@ try:
     print("HAPPY INVESTING!")
     print("-------------------------")
 except:
+    #if the stock symbol is not found, print out message
     print(symbol + " stock symbol not found. Please try again.")
 
