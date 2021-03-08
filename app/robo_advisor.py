@@ -35,38 +35,46 @@ if symbol.isalpha() == False:
     exit()
 
 
+
 try:
-    #request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&apikey=" + api_key
-    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=" + symbol + "&apikey=" + api_key
+    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&apikey=" + api_key
+    weekly_request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=" + symbol + "&apikey=" + api_key
     response = requests.get(request_url)
+    weekly_response = requests.get(weekly_request_url)
 
 
     #parse the text
     parsed_response = json.loads(response.text)
+    weekly_parsed_response = json.loads(weekly_response.text)
 
-    #tsd = parsed_response["Time Series (Daily)"]
-    tsd = parsed_response["Weekly Time Series"]
+    tsd = parsed_response["Time Series (Daily)"]
+    weekly_tsd = weekly_parsed_response["Weekly Time Series"]
 
     #find the last refreshed date
     last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
-    dates = []
+    weekly_dates = []
     #get list of dates
-    date_list = list(tsd.keys()) #sort to ensure latest day is first
+    dates = list(tsd.keys()) #sort to ensure latest day is first
+
+    #FURTHER EXPLORATION
+    week_list = list(weekly_tsd.keys())
     #go through 52 weeks, find each date and add to list
     for num in range(0,52):
-        dates.append(date_list[num])
+        weekly_dates.append(week_list[num])
+    
+    
     latest_day = dates[0]
 
-    #latest_close = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
-    #find the latest closing price
-    latest_close = parsed_response["Weekly Time Series"][latest_day]["4. close"]
+  #find the latest closing price
+    latest_close = parsed_response["Time Series (Daily)"][latest_day]["4. close"]
 
+    #FURTHER EXPLORATION
     #create lists to hold the high and low prices from each data
     high_prices = []
     low_prices = []
-    for date in dates:
-        high_price = float(tsd[date]["2. high"])
-        low_price = float(tsd[date]["3. low"])
+    for date in weekly_dates:
+        high_price = float(weekly_tsd[date]["2. high"])
+        low_price = float(weekly_tsd[date]["3. low"])
         high_prices.append(high_price)
         low_prices.append(low_price)
 
@@ -79,10 +87,10 @@ try:
     #buy the stock if the latest closing price is less than 25% above the recent low
     if float(latest_close) < (float(recent_low) * 1.25):
         recommend = "Buy!"
-        reason = "The stocks latest closing price is less than 25% higher than the recent low (in the past year), which is under the threshold."
+        reason = "The stocks latest closing price is less than 25% higher than the recent low, which is under the threshold."
     else:
         recommend = "Do not buy!"
-        reason = "The stocks latest closing price is more than 25% higher than the recent low (in the past year), exceeding the threshold."
+        reason = "The stocks latest closing price is more than 25% higher than the recent low, exceeding the threshold."
 
 
 
@@ -104,6 +112,7 @@ try:
 
             })
 
+    #FURTHER EXPLORATION
     #line graph for closing stock prices over time
     csv_df = pd.read_csv(csv_file_path)
 
