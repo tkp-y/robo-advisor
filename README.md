@@ -36,4 +36,4 @@ Run the project script:
 
     python app/robo_advisor.py
 
-(Adapted from from Professor Rossetti's markdown)
+(Adapted from Professor Rossetti's markdown)

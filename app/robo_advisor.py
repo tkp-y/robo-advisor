@@ -151,3 +151,5 @@ except:
     #if the stock symbol is not found, print out message
     print(symbol + " stock symbol not found. Please try again.")
 
+
+#Adapted from Professor Rossetti's screencast
