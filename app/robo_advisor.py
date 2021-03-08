@@ -30,8 +30,13 @@ def to_usd(my_price):
 
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 symbol = input("Please enter a stock or cryptocurrency symbol: ")
+#check if the input is all letters
 if symbol.isalpha() == False:
     print("Oh, expecting a properly-formed stock symbol like 'MSFT'. Please try again.")
+    exit()
+#check if input is between 1 and 5 characters
+elif len(symbol) < 1 or len(symbol) > 5:
+    print("Oh, expecting a properly-formed stock symbol like 'MSFT' with the correct number of letters. Please try again.")
     exit()
 
 
